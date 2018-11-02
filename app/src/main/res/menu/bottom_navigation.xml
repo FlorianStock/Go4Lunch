@@ -1,0 +1,34 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/action_bar"
+    >
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_action_mapview"
+        app:showAsAction="always"
+        android:title="@string/ic_map"
+        tools:icon="@drawable/ic_action_mapview">
+
+    </item>
+    <item
+        android:id="@+id/action_list"
+        android:icon="@drawable/ic_action_listview"
+        app:showAsAction="always"
+        android:title="@string/ic_list"
+        tools:icon="@drawable/ic_action_listview">
+    </item>
+
+    <item
+        android:id="@+id/action_workmates"
+        android:icon="@drawable/ic_action_workmates"
+        app:showAsAction="always"
+        android:title="@string/ic_workmates"
+        tools:icon="@drawable/ic_action_workmates">
+    </item>
+
+
+
+
+
+</menu>
