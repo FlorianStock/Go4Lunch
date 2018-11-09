@@ -88,6 +88,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
         //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
+        //int distance = (int) location.distanceTo(placeLocation);
 
         mlocationlistener = new LocationListener()
         {
@@ -229,6 +230,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
     {
         if(marker.equals(mUserMarker))
         {
+            RestaurantModel restaurantAlea = new RestaurantModel();
+
             Intent intent = new Intent(this.getActivity(), RestaurantProfileActivity.class);
             intent.putExtra("LoadLayout","Notifications");
             startActivity(intent);

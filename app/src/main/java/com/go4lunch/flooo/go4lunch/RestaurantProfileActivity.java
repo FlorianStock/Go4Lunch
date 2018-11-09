@@ -41,7 +41,7 @@ public class RestaurantProfileActivity extends AppCompatActivity
     @OnClick(R.id.likeAction)
     public void clickLikeButton()
     {
-        Toast.makeText(getApplicationContext(), "mon message", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "enregistré en favori", Toast.LENGTH_SHORT).show();
     }
     @OnClick(R.id.webSiteAction)
     public void clickWebSiteButton()
