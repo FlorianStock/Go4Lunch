@@ -11,4 +11,8 @@
     <string name="ic_list">List View</string>
     <string name="ic_workmates">WorkMates</string>
 
+    <string name="call">Call</string>
+    <string name="like">Like</string>
+    <string name="website">Website</string>
+
 </resources>

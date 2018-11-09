@@ -11,4 +11,8 @@
     <string name="ic_list">Liste des restaurants</string>
     <string name="ic_workmates">Collègues</string>
 
+    <string name="call">Appeler</string>
+    <string name="like">Aimer</string>
+    <string name="website">Site web</string>
+
 </resources>

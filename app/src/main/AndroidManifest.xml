@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".RestaurantProfileActivity" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyATJtReLnUIM5N4_1XaagOlrM1Lt4pKvNI"/>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
