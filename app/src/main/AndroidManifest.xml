@@ -10,20 +10,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true"
         >
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Controllers.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RestaurantProfileActivity" />
+        <activity android:name=".Controllers.Activities.RestaurantProfileActivity" />
+        <activity android:name=".Controllers.Activities.WebSiteRestaurantActivity" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyATJtReLnUIM5N4_1XaagOlrM1Lt4pKvNI"/>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
     </application>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
 
 
 </manifest>

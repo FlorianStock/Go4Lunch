@@ -5,148 +5,182 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<LinearLayout
-    android:orientation="vertical"
-    android:weightSum="10"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-    <ImageView
-        android:id="@+id/imageViewRestaurant"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        app:srcCompat="@android:color/holo_purple"
-       />
-
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:color/holo_orange_dark" />
-
-        <TextView
-            android:id="@+id/textViewNameRestaurant"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="Restaurant"
-            app:layout_constraintTop_toTopOf="@+id/imageView" />
-
-        <TextView
-            android:id="@+id/textViewAdress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="1 rue des gravières"
-            app:layout_constraintTop_toBottomOf="@+id/textViewNameRestaurant" />
-
-    </android.support.constraint.ConstraintLayout>
-
 
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10"
+       >
 
-        <LinearLayout
-            android:id ="@+id/callAction"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:orientation="vertical">
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
 
             <ImageView
-                android:id="@+id/tel"
+                android:id="@+id/imageViewRestaurant"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                app:srcCompat="@android:drawable/ic_menu_call" />
+                android:layout_height="match_parent"
+                app:srcCompat="@android:color/holo_purple" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@android:color/holo_orange_dark"
+               />
+
 
             <TextView
-                android:id="@+id/textViewCall"
-                android:layout_width="match_parent"
+                android:id="@+id/textViewNameRestaurant"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:padding="4dp"
-                android:text="@string/call" />
+                android:text="Restaurant"
+                app:layout_constraintTop_toTopOf="@+id/imageView" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/textViewAdress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text="1 rue des gravières"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNameRestaurant" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/floatingActionBar"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="-20dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/colorAccent"
+                    android:src="@drawable/ic_done"
+                    android:tint="@color/white"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:borderWidth="4dp"
+                    app:elevation="5dp" />
+
+            </RelativeLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
 
         <LinearLayout
-            android:id ="@+id/likeAction"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:orientation="vertical"
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="3"
             app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-            <ImageView
-                android:id="@+id/imageButtonlike"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:gravity="center_horizontal"
-                app:srcCompat="@android:drawable/btn_star" />
+            <LinearLayout
+                android:id="@+id/callAction"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewLike"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="4dp"
-                android:text="@string/like" />
+                <ImageView
+                    android:id="@+id/tel"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    app:srcCompat="@android:drawable/ic_menu_call" />
+
+                <TextView
+                    android:id="@+id/textViewCall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp"
+                    android:text="@string/call" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/likeAction"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+                <ImageView
+                    android:id="@+id/imageButtonlike"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_horizontal"
+                    app:srcCompat="@android:drawable/btn_star" />
+
+                <TextView
+                    android:id="@+id/textViewLike"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp"
+                    android:text="@string/like" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/webSiteAction"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+                <ImageView
+                    android:id="@+id/imageButtonWebsite"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:gravity="center_horizontal"
+                    app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+                <TextView
+                    android:id="@+id/textViewWebsite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="4dp"
+                    android:text="@string/website" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:id ="@+id/webSiteAction"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-            <ImageView
-                android:id="@+id/imageButtonWebsite"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:gravity="center_horizontal"
-                app:srcCompat="@android:drawable/ic_menu_mapmode" />
-
-            <TextView
-                android:id="@+id/textViewWebsite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="4dp"
-                android:text="@string/website" />
-
-        </LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </LinearLayout>
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-</LinearLayout>
 </android.support.constraint.ConstraintLayout>
