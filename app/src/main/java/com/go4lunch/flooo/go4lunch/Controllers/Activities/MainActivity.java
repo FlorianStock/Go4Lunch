@@ -1,31 +1,22 @@
-package com.go4lunch.flooo.go4lunch;
+package com.go4lunch.flooo.go4lunch.Controllers.Activities;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
+
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.firebase.ui.auth.AuthUI;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+import com.go4lunch.flooo.go4lunch.Controllers.Components.AdapterViewPager;
+import com.go4lunch.flooo.go4lunch.R;
 
 public class MainActivity extends AppCompatActivity
 {
