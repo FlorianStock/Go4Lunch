@@ -28,8 +28,6 @@ public interface GooglePlaceServiceAPI
     @GET("details/json?key="+KEY_API_MAPS)
     Observable<PlaceDetails> getPlaceDetails(@Query("placeid") String placeId);
 
-
-
     // Use excludeFieldsWithoutExposeAnnotation() for ignore some fields
 
     Retrofit retrofit = new Retrofit.Builder()

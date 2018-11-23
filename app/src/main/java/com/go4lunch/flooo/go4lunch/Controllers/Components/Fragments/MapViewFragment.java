@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.go4lunch.flooo.go4lunch.Controllers.Components.LocationUser;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -35,10 +38,12 @@ import com.go4lunch.flooo.go4lunch.Controllers.ApiGooglePlace.ApiStreamsRequest;
 import com.go4lunch.flooo.go4lunch.Models.PlaceNearBySearch;
 import com.go4lunch.flooo.go4lunch.R;
 
+import java.text.ParseException;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-public class MapViewFragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
+public class MapViewFragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnMarkerClickListener, LocationUser.CallBacks {
 
     private static final String ARG_PARAM1 = "param1";
 
@@ -67,43 +72,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
     {
         super.onCreate(savedInstanceState);
 
-        mlocationmanager = (LocationManager) this.getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-
         //int distance = (int) location.distanceTo(placeLocation);
-
-        mlocationlistener = new LocationListener()
-        {
-            @Override
-            public void onLocationChanged(Location location)
-            {
-                if(googleMap!=null)
-                {
-                    googleMap.clear();
-                    drawMarkerUser(location);
-                    searchRestaurant(location);
-                }
-
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle)
-            {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s)
-            {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s)
-            {
-
-            }
-        };
 
         if (getArguments() != null)
         {
@@ -111,30 +80,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
 
         }
 
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-        {
-            if(ContextCompat.checkSelfPermission(this.getContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-            {
-                Location location = mlocationmanager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                if(googleMap!=null)
-                {
-                    googleMap.clear();
-                    drawMarkerUser(location);
-                    searchRestaurant(location);
-                }
-
-                mlocationmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, mlocationlistener);
-
-            }
-        }
     }
 
     @Override
@@ -187,24 +132,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
 
         googleMap.setOnMarkerClickListener(this);
 
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-
-        }
-        else
-        {
-
-            Location location = mlocationmanager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            googleMap.clear();
-
-            if(location!=null) {
-                drawMarkerUser(location);
-                searchRestaurant(location);
-            }
-
-            mlocationmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, mlocationlistener);
-        }
+         new LocationUser(this.getContext(),this.getActivity(),10,0,this);
 
     }
 
@@ -317,12 +245,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
     private void searchRestaurant(Location location)
     {
 
-
         StringBuilder localization = new StringBuilder();
         localization.append(location.getLatitude());
         localization.append(",");
         localization.append(location.getLongitude());
-
 
         // 1.2 - Execute the stream subscribing to Observable defined inside GithubStream
         this.disposable = ApiStreamsRequest.searchRestaurant(localization.toString()).subscribeWith(new DisposableObserver<PlaceNearBySearch>()
@@ -360,4 +286,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
     }
 
 
+    @Override
+    public void currentPositionUserChanged(@Nullable Location locationUser) throws ParseException
+    {
+        if(locationUser!=null)
+        {
+            googleMap.clear();
+            drawMarkerUser(locationUser);
+            searchRestaurant(locationUser);
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.go4lunch.flooo.go4lunch.Models;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -32,14 +34,53 @@ public class PlaceNearBySearch
         @Expose
         private String name;
 
+        @SerializedName("opening_hours")
+        @Expose
+        private OpeningHours openingHours;
 
+        @SerializedName("photos")
+        @Expose
+        private List<Photo> photos;
 
+        @SerializedName("vicinity")
+        @Expose
+        private String vicinity;
+
+        @SerializedName("rating")
+        @Expose
+        private String rating;
+
+        private PlaceDetails placeDetails;
 
         public String getName() { return name; }
         public String getIcon() { return icon; }
         public String getId() { return id; }
         public Geometry getGeometry(){return geometry;}
+        public OpeningHours getOpeningHours() { return openingHours; }
+        public List<Photo> getPhotos() { return photos; }
+        public String getRating() { return rating; }
+        public String getVicinity() { return vicinity; }
+        public PlaceDetails getPlaceDetails() { return placeDetails; }
+        public void setPlaceDetails(PlaceDetails placeDetails){this.placeDetails = placeDetails;}
+    }
 
+
+    public class Photo
+    {
+        @SerializedName("photo_reference")
+        @Expose
+        private String photoReference;
+
+        public String getphotoReference() { return photoReference; }
+    }
+
+    public class OpeningHours
+    {
+        @SerializedName("open_now")
+        @Expose
+        private Boolean openNow;
+
+        public Boolean getOpenNow() { return openNow; }
     }
 
     public class Geometry
@@ -49,9 +90,11 @@ public class PlaceNearBySearch
         @Expose
         private Location location;
 
+        private int distanceToPoint;
+
         public Location getLocation() { return location; }
-
-
+        public int getDistanceToPoint() { return distanceToPoint; }
+        public void setDistanceToPoint(int distanceToPoint) { this.distanceToPoint = distanceToPoint; }
     }
 
     public class Location

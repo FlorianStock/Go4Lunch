@@ -11,7 +11,7 @@ public class PlaceDetails
 
     @SerializedName("result")
     @Expose
-    private Results results;
+    private Results results = new Results();
 
     public class Results
     {
@@ -35,6 +35,10 @@ public class PlaceDetails
         @Expose
         private String name;
 
+        @SerializedName("place_id")
+        @Expose
+        private String id;
+
         @SerializedName("photos")
         @Expose
         private List<Photo> photo;
@@ -45,6 +49,11 @@ public class PlaceDetails
         public String getWebsite() { return website;}
         public String getName() { return name; }
         public String getUrl() { return url; }
+        public String getId() { return id; }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
     }
 
     public class  Photo

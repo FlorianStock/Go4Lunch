@@ -2,7 +2,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyATJtReLnUIM5N4_1XaagOlrM1Lt4pKvNI</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyATJtReLnUIM5N4_1XaagOlrM1Lt4pKvNI</string>
 
     <string name="restaurant_random_1">http://clipart-library.com/data_images/183918.png</string>
+    <string name="restaurant_random_2">https://4vector.com/i/free-vector-hotel-icon-restaurant-clip-art_117644_Hotel_Icon_Restaurant_clip_art_small.png</string>
+
 </resources>

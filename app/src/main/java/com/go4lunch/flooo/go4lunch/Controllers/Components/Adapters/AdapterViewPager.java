@@ -1,10 +1,12 @@
-package com.go4lunch.flooo.go4lunch.Controllers.Components;
+package com.go4lunch.flooo.go4lunch.Controllers.Components.Adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.ListRestaurantsFragment;
+import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.ListUsersFragment;
 import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.MapViewFragment;
 
 
@@ -39,8 +41,8 @@ public class AdapterViewPager extends FragmentPagerAdapter
             switch(tabTitles[position])
             {
                 case "Map View":return MapViewFragment.newInstance();
-                //case "List View":return ListView.newInstance("d");
-                //case "WorkMates":return ListView.newInstance("e");
+                case "List View":return ListRestaurantsFragment.newInstance();
+                case "WorkMates":return ListUsersFragment.newInstance();
                 default:return MapViewFragment.newInstance();
             }
 
