@@ -8,6 +8,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 
 
@@ -21,10 +22,16 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.go4lunch.flooo.go4lunch.Controllers.ApiFireBase.FireBaseFireStoreCollectionUsers;
 import com.go4lunch.flooo.go4lunch.Controllers.Components.Adapters.AdapterViewPager;
+import com.go4lunch.flooo.go4lunch.Models.User;
 import com.go4lunch.flooo.go4lunch.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity implements OnFailureListener {
 
@@ -161,16 +168,35 @@ public class MainActivity extends AppCompatActivity implements OnFailureListener
         {
             if (resultCode == RESULT_OK)
             {
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 if (currentUser != null)
                 {
-                    String urlPicture = (currentUser.getPhotoUrl() != null) ? currentUser.getPhotoUrl().toString() : null;
-                    String username = currentUser.getDisplayName();
-                    String uid = currentUser.getUid();
-                    System.out.println(username);
-                    FireBaseFireStoreCollectionUsers.createUser(uid, username, urlPicture).addOnFailureListener(this);
+                    final String urlPicture = (currentUser.getPhotoUrl() != null) ? currentUser.getPhotoUrl().toString() : null;
+                    final String username = currentUser.getDisplayName();
+                    final String uid = currentUser.getUid();
+
+
+                    FireBaseFireStoreCollectionUsers.getUser(currentUser.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot)
+                        {
+                            User currentUser = documentSnapshot.toObject(User.class);
+
+                            if(currentUser==null)
+                            {
+                                FireBaseFireStoreCollectionUsers.createUser(uid, username, urlPicture);
+                            }
+                        }
+                    });
+
+
                 }
+
+
+
+
+
 
             } else
             { // ERRORS

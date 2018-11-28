@@ -13,6 +13,14 @@
 
     <string name="call">Call</string>
     <string name="like">Like</string>
+    <string name="dislike">Dislike</string>
     <string name="website">Website</string>
+
+    <string name="no_site_web">Sorry, this restaurant does not have a web site.</string>
+    <string name="no_phone">Sorry, this restaurant does not have a phone number.</string>
+
+    <string name="no_choice_restaurant">has not already choice a restaurant.</string>
+    <string name="choice_restaurant">has choice to eat in this restaurant :</string>
+    <string name="joining_restaurant">is joining !</string>
 
 </resources>

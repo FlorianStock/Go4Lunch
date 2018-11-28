@@ -11,15 +11,16 @@ import com.go4lunch.flooo.go4lunch.Controllers.Components.RecyclerViewListRestau
 import com.go4lunch.flooo.go4lunch.Models.PlaceNearBySearch;
 import com.go4lunch.flooo.go4lunch.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterRecyclerViewListRestaurants extends RecyclerView.Adapter<RecyclerViewListRestaurants>
 {
 
-    private PlaceNearBySearch restaurants;
+    private ArrayList<PlaceNearBySearch.Results> restaurants;
     private Context context;
 
-    public AdapterRecyclerViewListRestaurants(PlaceNearBySearch results,Context context)
+    public AdapterRecyclerViewListRestaurants(ArrayList<PlaceNearBySearch.Results> results,Context context)
     {
          restaurants=results;
          this.context = context;
@@ -44,7 +45,7 @@ public class AdapterRecyclerViewListRestaurants extends RecyclerView.Adapter<Rec
     @Override
     public int getItemCount()
     {
-        return restaurants.getResults().size();
+        return restaurants.size();
     }
 
 

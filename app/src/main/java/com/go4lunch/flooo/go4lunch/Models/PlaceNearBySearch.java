@@ -52,6 +52,9 @@ public class PlaceNearBySearch
 
         private PlaceDetails placeDetails;
 
+        private int counterLaunch = 0;
+        private int ratingUsers = 0;
+
         public String getName() { return name; }
         public String getIcon() { return icon; }
         public String getId() { return id; }
@@ -61,7 +64,12 @@ public class PlaceNearBySearch
         public String getRating() { return rating; }
         public String getVicinity() { return vicinity; }
         public PlaceDetails getPlaceDetails() { return placeDetails; }
+        public int getRatingUsers(){return ratingUsers;}
+        public int getCounterLaunch(){return counterLaunch;}
+
         public void setPlaceDetails(PlaceDetails placeDetails){this.placeDetails = placeDetails;}
+        public void addUserToCounterLaunch(){counterLaunch+=1;}
+        public void setRatingUsers(int ratingUsers){this.ratingUsers=ratingUsers;}
     }
 
 
