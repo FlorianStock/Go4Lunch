@@ -19,7 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.go4lunch.flooo.go4lunch.Controllers.ApiFireBase.FireBaseFireStoreCollectionUsers;
 import com.go4lunch.flooo.go4lunch.Controllers.Components.LocationUser;
+import com.go4lunch.flooo.go4lunch.Models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -37,6 +39,9 @@ import com.go4lunch.flooo.go4lunch.Controllers.Activities.RestaurantProfileActiv
 import com.go4lunch.flooo.go4lunch.Controllers.ApiGooglePlace.ApiStreamsRequest;
 import com.go4lunch.flooo.go4lunch.Models.PlaceNearBySearch;
 import com.go4lunch.flooo.go4lunch.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 
@@ -57,14 +62,29 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
     private Marker mUserMarker;
     private Marker mRestaurantMarker;
 
+    private static MapViewFragment fragment;
+
     //FOR DATA
+    private Location location;
     public Disposable disposable;
     public PlaceNearBySearch restaurants;
 
     public static MapViewFragment newInstance()
     {
-        MapViewFragment fragment = new MapViewFragment();
+        fragment = new MapViewFragment();
         return fragment;
+    }
+
+    public static MapViewFragment getInstance()
+    {
+        return fragment;
+    }
+
+    public void refresh()
+    {
+        googleMap.clear();
+        drawMarkerUser(location);
+        searchRestaurant(location);
     }
 
     @Override
@@ -154,20 +174,46 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
         }
     }
 
-    private void drawMarkerRestaurant(Location location,String name,String id)
+    private void drawMarkerRestaurant(final Location location, final String name, final String id)
     {
         if (googleMap != null)
         {
 
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant_red);
 
-            LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
-            mRestaurantMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(gps)
-                    .icon(icon)
-                    .title(name));
+            FireBaseFireStoreCollectionUsers.getUsersCollection().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task)
+                {
+                    if (task.isSuccessful())
+                    {
+                        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant_red);
 
-            mRestaurantMarker.setSnippet(id);
+                        for(int i=0;i<task.getResult().getDocuments().size();i++)
+                        {
+                            User user = task.getResult().getDocuments().get(i).toObject(User.class);
+
+                            if(user.getPlaceID().equals(id))
+                            {
+
+                                icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_restaurant_green);
+                                break;
+                            }
+                        }
+
+                        LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
+                        mRestaurantMarker = googleMap.addMarker(new MarkerOptions()
+                                .position(gps)
+                                .icon(icon)
+                                .title(name));
+
+                        mRestaurantMarker.setSnippet(id);
+                    }
+
+
+
+                }});
+
+
 
             //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 13));
 
@@ -291,6 +337,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,Goog
     {
         if(locationUser!=null)
         {
+            location=locationUser;
             googleMap.clear();
             drawMarkerUser(locationUser);
             searchRestaurant(locationUser);

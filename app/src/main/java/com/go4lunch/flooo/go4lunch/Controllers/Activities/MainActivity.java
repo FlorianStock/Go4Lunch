@@ -22,6 +22,7 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.go4lunch.flooo.go4lunch.Controllers.ApiFireBase.FireBaseFireStoreCollectionUsers;
 import com.go4lunch.flooo.go4lunch.Controllers.Components.Adapters.AdapterViewPager;
+import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.ListRestaurantsFragment;
 import com.go4lunch.flooo.go4lunch.Models.User;
 import com.go4lunch.flooo.go4lunch.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements OnFailureListener
                         break;
                     case R.id.action_list:
                         pager.setCurrentItem(1);
+                        ListRestaurantsFragment.getInstance().refresh();
                         break;
                     case R.id.action_workmates:
                         pager.setCurrentItem(2);

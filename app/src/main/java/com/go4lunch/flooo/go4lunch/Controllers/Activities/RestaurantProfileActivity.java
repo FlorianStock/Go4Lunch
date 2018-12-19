@@ -24,6 +24,8 @@ import com.go4lunch.flooo.go4lunch.Controllers.ApiFireBase.FireBaseFireStoreColl
 import com.go4lunch.flooo.go4lunch.Controllers.ApiGooglePlace.ApiStreamsRequest;
 import com.go4lunch.flooo.go4lunch.Controllers.ApiGooglePlace.GooglePlaceServiceAPI;
 import com.go4lunch.flooo.go4lunch.Controllers.Components.Adapters.AdapterRecyclerViewListUsers;
+import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.ListRestaurantsFragment;
+import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.MapViewFragment;
 import com.go4lunch.flooo.go4lunch.Models.PlaceDetails;
 import com.go4lunch.flooo.go4lunch.Models.User;
 import com.go4lunch.flooo.go4lunch.R;
@@ -72,9 +74,12 @@ public class RestaurantProfileActivity extends AppCompatActivity {
     private String phoneNumber;
     private String website;
     private ArrayList<User> usersWhoEat;
-    private ArrayList<String> currentUserLikeRestaurants = new ArrayList<>();
+    private ArrayList<String> currentUserLikesRestaurants = new ArrayList<>();
+
     private Boolean currentUserWhoEat =false;
     private int numberOfUsers=0;
+    private int likesCounter;
+    private Boolean buttonLikeOn=false;
 
     public RestaurantProfileActivity() {
 
@@ -96,7 +101,7 @@ public class RestaurantProfileActivity extends AppCompatActivity {
         recyclerViewListUsers.setLayoutManager(new LinearLayoutManager(context));
         adapterRecyclerViewListUsers = new AdapterRecyclerViewListUsers(usersWhoEat,context,true);
         recyclerViewListUsers.setAdapter(adapterRecyclerViewListUsers);
-        currentUserLikeRestaurants.clear();
+        currentUserLikesRestaurants.clear();
         this.disposable = ApiStreamsRequest.searchDetailsRestaurant(id).subscribeWith(new DisposableObserver<PlaceDetails>() {
 
             @Override
@@ -129,7 +134,7 @@ public class RestaurantProfileActivity extends AppCompatActivity {
                 }
 
                 //Picasso.with(context).load(urlImage).into(viewRestaurant);
-                Picasso.with(context).load(urlImage).resize(viewRestaurant.getWidth(), viewRestaurant.getHeight()-90).into(viewRestaurant);
+                Picasso.with(context).load(urlImage).resize(viewRestaurant.getWidth(), viewRestaurant.getHeight()).centerCrop().into(viewRestaurant);
 
                 mRestaurantTitle.setText(details.getResults().getName());
                 mRestaurantAdress.setText(details.getResults().getAdress());
@@ -147,7 +152,7 @@ public class RestaurantProfileActivity extends AppCompatActivity {
 
     private void getUsersWhoJoining()
     {
-        currentUserLikeRestaurants.clear();
+        currentUserLikesRestaurants.clear();
         FireBaseFireStoreCollectionUsers.getUsersCollection().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task)
@@ -156,7 +161,7 @@ public class RestaurantProfileActivity extends AppCompatActivity {
 
                     usersWhoEat.clear();
 
-                    int getLikes=0;
+                    likesCounter=0;
 
                     for (int i = 0; i < task.getResult().getDocuments().size(); i++) {
 
@@ -170,26 +175,30 @@ public class RestaurantProfileActivity extends AppCompatActivity {
                             if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(task.getResult().getDocuments().get(i).getId())){
                                 userEatInThisRestaurant(true); }
                         }
+
                             //For all users get theirs RestaurantsLike
                             for (String restaurant : user.getRestaurantsUserLike())
                             {
-                                currentUserLikeRestaurants.add(restaurant);
+                                //Add restaurants to a list for the current user.
+                                if(user.getid().equals(FirebaseAuth.getInstance().getUid())){
+                                    currentUserLikesRestaurants.add(restaurant);
+                                }
 
                                 //in their list, if the restaurant equals the current place id
                                 if (restaurant.equals(details.getResults().getId()))
                                 {
                                     //In this list, if the user is the current user:
                                     if(user.getid().equals(FirebaseAuth.getInstance().getUid())){
+                                    buttonLikeOn=true;
                                     imageButtonlike.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
                                     textButtonlike.setText(context.getResources().getText(R.string.dislike));}
-
-                                    getLikes+=1;
+                                    likesCounter+=1;
 
                                 }
                             }
                     }
 
-                    configureStars(getLikes);
+                    configureStars(likesCounter);
                 }
                 adapterRecyclerViewListUsers.notifyDataSetChanged();
             }
@@ -201,6 +210,9 @@ public class RestaurantProfileActivity extends AppCompatActivity {
         int rating=0;
         if(numberOfUsers!=0){
             rating = Math.round((getLikes*3)/numberOfUsers);}
+        starRestaurant1.setVisibility(View.INVISIBLE);
+        starRestaurant2.setVisibility(View.INVISIBLE);
+        starRestaurant3.setVisibility(View.INVISIBLE);
         if(rating>0){starRestaurant1.setVisibility(View.VISIBLE);}
         if(rating>1){starRestaurant2.setVisibility(View.VISIBLE);}
         if(rating>2){starRestaurant3.setVisibility(View.VISIBLE);}
@@ -234,6 +246,9 @@ public class RestaurantProfileActivity extends AppCompatActivity {
             floatingActionBar.setBackgroundTintList(ColorStateList.valueOf(Color.BLUE));
             floatingActionBar.setRippleColor(Color.BLUE);
         }
+
+        ListRestaurantsFragment.getInstance().refresh();
+        MapViewFragment.getInstance().refresh();
     }
 
     @OnClick(R.id.callAction)
@@ -252,33 +267,34 @@ public class RestaurantProfileActivity extends AppCompatActivity {
     @OnClick(R.id.likeAction)
     public void clickLikeButton()
     {
-        Boolean set=true;
-        Iterator<String> iter = currentUserLikeRestaurants.iterator();
 
-        while (iter.hasNext()) {
-            String str = iter.next();
 
-            if (str.equals(details.getResults().getId())){
 
-                iter.remove();
-                FireBaseFireStoreCollectionUsers.updateListLikeRestaurants(currentUserLikeRestaurants,FirebaseAuth.getInstance().getCurrentUser().getUid());
-                //UI SHOW LIKE ACTION
-                imageButtonlike.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
-                textButtonlike.setText(context.getResources().getText(R.string.like));
-                set=false;
-            }
-
-        }
-
-        if(set)
+        if(!buttonLikeOn)
         {
-        //DATA UPDATE LIKE
-        currentUserLikeRestaurants.add(details.getResults().getId());
-        FireBaseFireStoreCollectionUsers.updateListLikeRestaurants(currentUserLikeRestaurants,FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //DATA UPDATE
+        likesCounter+=1;
+        currentUserLikesRestaurants.add(details.getResults().getId());
+        buttonLikeOn = true;
         //UI SHOW LIKE ACTION
         imageButtonlike.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_on));
         textButtonlike.setText(context.getResources().getText(R.string.dislike));
+
         }
+        else
+        {
+        //DATA UPDATE
+        likesCounter -= 1;
+        currentUserLikesRestaurants.remove(details.getResults().getId());
+        buttonLikeOn = false;
+        //UI SHOW LIKE ACTION
+        imageButtonlike.setImageDrawable(context.getResources().getDrawable(android.R.drawable.btn_star_big_off));
+        textButtonlike.setText(context.getResources().getText(R.string.like));
+        }
+
+        FireBaseFireStoreCollectionUsers.updateListLikeRestaurants(currentUserLikesRestaurants,FirebaseAuth.getInstance().getCurrentUser().getUid());
+        ListRestaurantsFragment.getInstance().refresh();
+        configureStars(likesCounter);
 
     }
     @OnClick(R.id.webSiteAction)

@@ -34,7 +34,11 @@ public class LocationUser implements ActivityCompat.OnRequestPermissionsResultCa
         void currentPositionUserChanged(@Nullable Location locationUser) throws ParseException;
     }
 
-    public LocationUser(Context context, Activity activity,int minDist,int minTime, final CallBacks callBacks)
+    public Location getLocationLast() {
+        return locationLast;
+    }
+
+    public LocationUser(Context context, Activity activity, int minDist, int minTime, final CallBacks callBacks)
     {
         this.activity = activity;
         this.context = context;

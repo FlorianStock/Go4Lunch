@@ -68,8 +68,9 @@ public class PlaceNearBySearch
         public int getCounterLaunch(){return counterLaunch;}
 
         public void setPlaceDetails(PlaceDetails placeDetails){this.placeDetails = placeDetails;}
-        public void addUserToCounterLaunch(){counterLaunch+=1;}
+        public void addUserToCounterLaunch( ){this.counterLaunch+=1;}
         public void setRatingUsers(int ratingUsers){this.ratingUsers=ratingUsers;}
+        public void setCounterLaunch(int counterLaunch) { this.counterLaunch = counterLaunch; }
     }
 
 

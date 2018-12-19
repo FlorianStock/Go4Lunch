@@ -25,7 +25,7 @@
                 android:id="@+id/imageViewRestaurant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="60dp"
+                android:paddingBottom="0dp"
                 app:srcCompat="@android:color/holo_purple" />
 
             <ImageView
@@ -100,10 +100,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="40dp"
-                android:background="@color/colorAccent"
                 android:src="@drawable/ic_done"
-                android:tint="@color/white"
-                android:visibility="visible"
                 app:backgroundTint="@color/colorPrimary"
                 app:borderWidth="4dp"
                 android:layout_alignParentBottom="true"

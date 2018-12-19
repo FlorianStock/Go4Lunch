@@ -1,6 +1,7 @@
 package com.go4lunch.flooo.go4lunch.Controllers.Components;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.go4lunch.flooo.go4lunch.Controllers.Activities.RestaurantProfileActivity;
 import com.go4lunch.flooo.go4lunch.Controllers.ApiFireBase.FireBaseFireStoreCollectionUsers;
 import com.go4lunch.flooo.go4lunch.Controllers.ApiGooglePlace.GooglePlaceServiceAPI;
 import com.go4lunch.flooo.go4lunch.Models.PlaceNearBySearch;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder
+public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder implements View.OnClickListener
 {
 
     private ArrayList<PlaceNearBySearch.Results> placeNearBySearch;
@@ -52,21 +54,38 @@ public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder
     @BindView(R.id.star_3)
     ImageView starImage3;
 
+    private String placeId;
+    private Context context;
 
-    public RecyclerViewListRestaurants(View itemView,ArrayList<PlaceNearBySearch.Results> results)
+
+    public RecyclerViewListRestaurants(View itemView,ArrayList<PlaceNearBySearch.Results> results,Context context)
     {
         super(itemView);
         ButterKnife.bind(this, itemView);
 
         this.placeNearBySearch = results;
+        this.context=context;
+
+        itemView.setOnClickListener(this);
 
     }
 
-    public void updateView(int position, Context context)
+    @Override
+    public void onClick(View view)
     {
 
+            Intent intent = new Intent(context, RestaurantProfileActivity.class);
+            intent.putExtra("ID",placeId);
+            context.startActivity(intent);
+    }
+
+    public void updateView(int position)
+    {
+        placeId = placeNearBySearch.get(position).getId();
+
+
         mRestaurantTitle.setText(placeNearBySearch.get(position).getName());
-        mAdressRestaurant.setText(placeNearBySearch.get(position).getVicinity());
+        mAdressRestaurant.setText(placeNearBySearch.get(position).getPlaceDetails().getResults().getAdress());
         String distanceText = String.valueOf(placeNearBySearch.get(position).getGeometry().getDistanceToPoint())+"m";
         mDistanceText.setText(distanceText);
 
@@ -83,7 +102,20 @@ public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder
         Picasso.with(context).load(url).resize(50, 50).centerCrop().into(mImageRestaurant);
 
 
+        try {
+    if (placeNearBySearch.get(position).getPlaceDetails() != null) {
+        mOpeningHours.setText(placeNearBySearch.get(position).getPlaceDetails().getResults().getOpeningHours().getOpen().toString());
+    }
+        }
+        catch (NullPointerException e){
+
+        }
+
+
         int rating = placeNearBySearch.get(position).getRatingUsers();
+        starImage1.setVisibility(View.INVISIBLE);
+        starImage2.setVisibility(View.INVISIBLE);
+        starImage3.setVisibility(View.INVISIBLE);
         if(rating>0){starImage1.setVisibility(View.VISIBLE);}
         if(rating>1){starImage2.setVisibility(View.VISIBLE);}
         if(rating>2){starImage3.setVisibility(View.VISIBLE);}
