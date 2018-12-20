@@ -42,7 +42,7 @@ public class AdapterRecyclerViewListRestaurants extends RecyclerView.Adapter<Rec
     public void onBindViewHolder(@NonNull RecyclerViewListRestaurants holder, int position)
     {
 
-        holder.updateView(position);
+        holder.updateView(restaurants.get(position));
 
     }
 

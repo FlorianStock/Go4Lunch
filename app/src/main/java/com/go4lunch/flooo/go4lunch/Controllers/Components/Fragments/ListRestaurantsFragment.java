@@ -37,13 +37,13 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
     //@BindView(R.id.listRestaurants)
     RecyclerView mListRestaurants;
 
-    private ArrayList<PlaceNearBySearch.Results> restaurants = new ArrayList<>();
+    private   ArrayList<PlaceNearBySearch.Results> restaurants = new ArrayList<>();
 
     private AdapterRecyclerViewListRestaurants adapterRecyclerViewListRestaurants;
 
     private static ListRestaurantsFragment fragment;
 
-    PlaceNearBySearch results;
+    private  PlaceNearBySearch results;
 
     private Disposable disposable;
     private Disposable disposableDetailRestaurants;
@@ -77,6 +77,7 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
     public void refresh()
     {
         configureUsers();
+        adapterRecyclerViewListRestaurants.notifyDataSetChanged();
     }
 
     @Override
@@ -87,11 +88,8 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
 
         this.mListRestaurants = view.findViewById(R.id.listRestaurants);
         mListRestaurants.setLayoutManager(new LinearLayoutManager(container.getContext()));
-
         adapterRecyclerViewListRestaurants = new AdapterRecyclerViewListRestaurants(restaurants, getContext());
         mListRestaurants.setAdapter(adapterRecyclerViewListRestaurants);
-
-
 
         new LocationUser(this.getContext(),this.getActivity(),0,0,this);
 
@@ -101,12 +99,14 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
             public void currentPositionUserChanged(@Nullable final Location locationUser) throws ParseException
             {
 
-                StringBuilder localization = new StringBuilder();
-                localization.append(locationUser.getLatitude());
-                localization.append(",");
-                localization.append(locationUser.getLongitude());
+                location=locationUser;
 
-                disposable = ApiStreamsRequest.searchRestaurant(localization.toString()).subscribeWith(new DisposableObserver<PlaceNearBySearch>()
+                StringBuilder localisation = new StringBuilder();
+                localisation.append(locationUser.getLatitude());
+                localisation.append(",");
+                localisation.append(locationUser.getLongitude());
+
+                disposable = ApiStreamsRequest.searchRestaurant(localisation.toString()).subscribeWith(new DisposableObserver<PlaceNearBySearch>()
                 {
 
 
@@ -116,6 +116,7 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
                     {
 
                         results = placeNearBySearch;
+
 
                     }
 
@@ -139,10 +140,13 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
         });
 
 
+
         // Inflate the layout for this fragment
         return view;
 
     }
+
+
 
     private void getDetailsForRestaurants(final Location location)
     {
@@ -175,12 +179,15 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
 
                 result.setPlaceDetails(emptyPlaceDetails);
 
+
                 if(result == results.getResults().get(results.getResults().size()-1)){
                     restaurants.clear();
                     restaurants.addAll(results.getResults());
+
                     distanceToRestaurants(location);
                     configureUsers();
-                    adapterRecyclerViewListRestaurants.notifyDataSetChanged();
+
+
                 }
 
             }
@@ -199,6 +206,15 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
     private void configureUsers()
     {
 
+        for(PlaceNearBySearch.Results result:restaurants) {
+            result.setCounterLaunch(0);
+            result.setRatingUsers(0);
+        }
+
+        for(PlaceNearBySearch.Results result:results.getResults()) {
+            result.setCounterLaunch(0);
+            result.setRatingUsers(0);
+        }
 
         FireBaseFireStoreCollectionUsers.getUsersCollection().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -223,8 +239,10 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
                                 User user = task.getResult().getDocuments().get(i).toObject(User.class);
 
                                 //If a user has choice this restaurant to eat, adding in the counter item.
-                                if(user.getPlaceID().equals(result.getId())){
-                                    counterLaunch+=1; }
+                                if(user.getPlaceID().equals(result.getId()))
+                                {
+                                    counterLaunch+=1;
+                                }
 
                                 Iterator<String> restaurantI = user.getRestaurantsUserLike().iterator();
 
@@ -240,20 +258,24 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
                                 }
                             }
 
+                                if(users!=0)
+                                {
+                                    int rating = Math.round((counterLikeByRestaurant*3)/users);
+                                    result.setRatingUsers(rating);
 
-
-                            if(users!=0){
-                                int rating = Math.round((counterLikeByRestaurant*3)/users);
-                                result.setRatingUsers(rating);
+                                }
 
                             }
 
 
-                        }
+
+
 
                             result.setCounterLaunch(counterLaunch);
-                            adapterRecyclerViewListRestaurants.notifyDataSetChanged();
+
                         }
+                    adapterRecyclerViewListRestaurants.notifyDataSetChanged();
+
 
 
                 }
@@ -284,7 +306,7 @@ public class ListRestaurantsFragment extends Fragment implements LocationUser.Ca
     public void currentPositionUserChanged(@Nullable Location locationUser) throws ParseException
     {
         distanceToRestaurants(locationUser);
-        //adapterRecyclerViewListRestaurants.notifyDataSetChanged();
+        adapterRecyclerViewListRestaurants.notifyDataSetChanged();
     }
 
 }

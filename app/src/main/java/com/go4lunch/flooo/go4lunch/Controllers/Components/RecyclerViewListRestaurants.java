@@ -79,20 +79,20 @@ public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder impleme
             context.startActivity(intent);
     }
 
-    public void updateView(int position)
+    public void updateView(PlaceNearBySearch.Results position)
     {
-        placeId = placeNearBySearch.get(position).getId();
+        placeId = position.getId();
 
 
-        mRestaurantTitle.setText(placeNearBySearch.get(position).getName());
-        mAdressRestaurant.setText(placeNearBySearch.get(position).getPlaceDetails().getResults().getAdress());
-        String distanceText = String.valueOf(placeNearBySearch.get(position).getGeometry().getDistanceToPoint())+"m";
+        mRestaurantTitle.setText(position.getName());
+        mAdressRestaurant.setText(position.getPlaceDetails().getResults().getAdress());
+        String distanceText = String.valueOf(position.getGeometry().getDistanceToPoint())+"m";
         mDistanceText.setText(distanceText);
 
         String url;
-        if(placeNearBySearch.get(position).getPhotos()!=null)
+        if(position.getPhotos()!=null)
         {
-            String reference = placeNearBySearch.get(position).getPhotos().get(0).getphotoReference();
+            String reference = position.getPhotos().get(0).getphotoReference();
             url = GooglePlaceServiceAPI.baseUrl+"photo?maxwidth=50&photoreference="+reference+"&key="+GooglePlaceServiceAPI.KEY_API_MAPS;
         }
         else
@@ -102,17 +102,12 @@ public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder impleme
         Picasso.with(context).load(url).resize(50, 50).centerCrop().into(mImageRestaurant);
 
 
-        try {
-    if (placeNearBySearch.get(position).getPlaceDetails() != null) {
-        mOpeningHours.setText(placeNearBySearch.get(position).getPlaceDetails().getResults().getOpeningHours().getOpen().toString());
-    }
-        }
-        catch (NullPointerException e){
 
-        }
+        mOpeningHours.setText(position.getPlaceDetails().getResults().getWebsite());
 
 
-        int rating = placeNearBySearch.get(position).getRatingUsers();
+
+        int rating = position.getRatingUsers();
         starImage1.setVisibility(View.INVISIBLE);
         starImage2.setVisibility(View.INVISIBLE);
         starImage3.setVisibility(View.INVISIBLE);
@@ -120,7 +115,7 @@ public class RecyclerViewListRestaurants extends RecyclerView.ViewHolder impleme
         if(rating>1){starImage2.setVisibility(View.VISIBLE);}
         if(rating>2){starImage3.setVisibility(View.VISIBLE);}
 
-        int goForLaunch = placeNearBySearch.get(position).getCounterLaunch();
+        int goForLaunch = position.getCounterLaunch();
         if(goForLaunch!=0){
             launchUi.setVisibility(View.VISIBLE);
             String txt ="("+String.valueOf(goForLaunch)+")";

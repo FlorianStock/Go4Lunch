@@ -3,6 +3,7 @@ package com.go4lunch.flooo.go4lunch.Controllers.Components.Adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
 import com.go4lunch.flooo.go4lunch.Controllers.Components.Fragments.ListRestaurantsFragment;
@@ -47,6 +48,8 @@ public class AdapterViewPager extends FragmentPagerAdapter
             }
 
         }
+
+
 
 
 
